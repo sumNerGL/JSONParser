@@ -203,9 +203,6 @@ def t_json_list():
 }'''
     # l1 = ['{', '"employees"', ':', '[', '{', '"firstName"', ':', '"John"', ',', '"lastName"', ':', '"Doe"', '}', ',', '{', '"firstName"', ':', '123', ',', '"lastName"', ':', '"Smith"', '}', ']', '}']
 
-    print(s1)
-    print('>>>')
-    print(json_list(s1))
 
 
 def t_tree():
@@ -216,9 +213,11 @@ def t_tree():
 ]
 }'''
     # s1 = '''{"employees": [{ "firstName":-12.34 , "lastName":null }]}'''
-
+    print('字符串：', s1)
     print('>>>')
-    print(tree(s1))
+    print(json_list(s1))
+    print('>>>')
+    print('结果：', tree(s1))
 
     s2 = '''{
    "achievement" : [ "ach1", "ach2", "ach3" ],
@@ -232,16 +231,16 @@ def t_tree():
    "sex_is_male" : true
 }'''
     print('\n\n')
-    print(s2)
+    print('字符串：', s2)
     print('>>>')
     print(json_list(s2))
     print('>>>')
-    print(tree(s2))
+    print('结果：', tree(s2))
 
 
 def t():
-    t_common_element()
-    t_json_list()
+    # t_common_element()
+    # t_json_list()
     t_tree()
 
 t()
