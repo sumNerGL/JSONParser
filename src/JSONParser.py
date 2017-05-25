@@ -123,6 +123,7 @@ def list_element(l, t='l'):
             self_count += child_count
             r.append(le)
             if (len(l) > (i+child_count+1)) and (l[i+child_count+1] == ','):
+                # print('if_in')
                 count += 1
                 self_count += 1
         elif e == '{':
@@ -131,6 +132,7 @@ def list_element(l, t='l'):
             self_count += child_count
             r.append(le)
             if (len(l) > (i+child_count+1)) and (l[i+child_count+1] == ','):
+                # print('if_in')
                 count += 1
                 self_count += 1
         elif t == 'l':
@@ -141,16 +143,23 @@ def list_element(l, t='l'):
         elif t == 'd':
             k = l[i]
             # print('l[i:]', l[i:])
-            if l[i+2] == '{':
+            if (len(l) > (i+2)) and (l[i+2] == '{'):
                 v, child_count = list_element(l[i+3:], 'd')
                 count += child_count
                 self_count += child_count
-            elif l[i+2] == '[':
+                if (len(l) > (i+child_count+3)) and (l[i+child_count+3] == ','):
+                    count += 1
+                    self_count += 1
+            elif (len(l) > (i+2)) and (l[i+2] == '['):
                 v, child_count = list_element(l[i+3:], 'l')
                 count += child_count
                 self_count += child_count
+                if (len(l) > (i+child_count+3)) and (l[i+child_count+3] == ','):
+                    count += 1
+                    self_count += 1
             else:
                 v = l[i+2]
+                # count += 2
             # print('k, v', k, v)
             r[k] = v
             if l[i+3] == ',':
@@ -159,6 +168,7 @@ def list_element(l, t='l'):
             else:
                 count += 2
                 self_count += 2
+            # print('count', count)
 
     # print('self_count', self_count)
     # print('r', r)
@@ -209,6 +219,24 @@ def t_tree():
 
     print('>>>')
     print(tree(s1))
+
+    s2 = '''{
+   "achievement" : [ "ach1", "ach2", "ach3" ],
+   "age" : 23,
+   "name" : "Tsybius",
+   "partner" : {
+      "partner_age" : 21,
+      "partner_name" : "Galatea",
+      "partner_sex_is_male" : false
+   },
+   "sex_is_male" : true
+}'''
+    print('\n\n')
+    print(s2)
+    print('>>>')
+    print(json_list(s2))
+    print('>>>')
+    print(tree(s2))
 
 
 def t():
