@@ -12,6 +12,6 @@
 
 <img src='https://github.com/sumNerGL/JSONParser/blob/master/screenshot/tree1.png' />
 
-效果图1：
+效果图2：
 
 <img src='https://github.com/sumNerGL/JSONParser/blob/master/screenshot/tree2.png' />
