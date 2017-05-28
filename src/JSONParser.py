@@ -100,86 +100,65 @@ def json_list(s):
     return l
 
 
-def list_element(l, t='l'):
-    # print('l', l)
-    if t == 'l':
-        r = []
-    elif t == 'd':
-        r = {}
+def list_element(l):
+    r = []
     count = 0
     self_count = 0
     for i, e in enumerate(l):
+        self_count += 1
         if count > 0:
             count -= 1
             continue
-        self_count += 1
         if e == ']':
             break
+        else:
+            token, child_count = parser(l[i:])
+            r.append(token)
+            count += child_count
+            if l[i+child_count+1] == ',':
+                count += 1
+    return r, self_count
+
+
+def dict_element(l):
+    r = {}
+    count = 0
+    self_count = 0
+    for i, e in enumerate(l):
+        self_count += 1
+        if count > 0:
+            count -= 1
+            continue
         if e == '}':
             break
-        elif e == '[':
-            le, child_count = list_element(l[i+1:])
-            count = child_count
-            self_count += child_count
-            r.append(le)
-            if (len(l) > (i+child_count+1)) and (l[i+child_count+1] == ','):
-                # print('if_in')
-                count += 1
-                self_count += 1
-        elif e == '{':
-            le, child_count = list_element(l[i+1:], 'd')
-            count = child_count
-            self_count += child_count
-            r.append(le)
-            if (len(l) > (i+child_count+1)) and (l[i+child_count+1] == ','):
-                # print('if_in')
-                count += 1
-                self_count += 1
-        elif t == 'l':
-            r.append(e)
-            if l[i+1] == ',':
-                count += 1
-                self_count += 1
-        elif t == 'd':
-            k = l[i]
-            # print('l[i:]', l[i:])
-            if (len(l) > (i+2)) and (l[i+2] == '{'):
-                v, child_count = list_element(l[i+3:], 'd')
-                count += child_count
-                self_count += child_count
-                if (len(l) > (i+child_count+3)) and (l[i+child_count+3] == ','):
-                    count += 1
-                    self_count += 1
-            elif (len(l) > (i+2)) and (l[i+2] == '['):
-                v, child_count = list_element(l[i+3:], 'l')
-                count += child_count
-                self_count += child_count
-                if (len(l) > (i+child_count+3)) and (l[i+child_count+3] == ','):
-                    count += 1
-                    self_count += 1
-            else:
-                v = l[i+2]
-                # count += 2
-            # print('k, v', k, v)
+        else:
+            k = e
+            v, child_count = parser(l[i+2:])
             r[k] = v
-            if l[i+3] == ',':
-                count += 3
-                self_count += 3
-            else:
-                count += 2
-                self_count += 2
-            # print('count', count)
-
-    # print('self_count', self_count)
-    # print('r', r)
+            count += child_count + 2
+            if l[i+count+1] == ',':
+                count += 1
     return r, self_count
+
+
+def parser(l):
+    c = 0
+    if l[0] == '{':
+        r, child_count = dict_element(l[1:])
+        c = child_count
+        pass
+    elif l[0] == '[':
+        r, child_count = list_element(l[1:])
+        c = child_count
+    else:
+        r = l[0]
+    return r, c
 
 
 def tree(s):
     l = json_list(s)
-    # print('tree_l', l)
-    r, c = list_element(l)
-    return r[0]
+    r, c = parser(l)
+    return r
 
 
 def t_common_element():
@@ -193,7 +172,6 @@ def t_common_element():
     ensure(common_element(s2) == '123', 'common_element 测试2')
 
 
-
 def t_json_list():
     s1 = '''{
 "employees": [
@@ -201,8 +179,6 @@ def t_json_list():
 { "firstName":true , "lastName":["Smith", 123] }
 ]
 }'''
-    # l1 = ['{', '"employees"', ':', '[', '{', '"firstName"', ':', '"John"', ',', '"lastName"', ':', '"Doe"', '}', ',', '{', '"firstName"', ':', '123', ',', '"lastName"', ':', '"Smith"', '}', ']', '}']
-
 
 
 def t_tree():
@@ -239,6 +215,7 @@ def t_tree():
 
 
 def t():
+    pass
     # t_common_element()
     # t_json_list()
     t_tree()
