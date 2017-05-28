@@ -77,7 +77,7 @@ def fomatted_element(s):
         return r
 
 
-def json_list(s):
+def tokenizer(s):
     l = []
     count = 0
     tokens = '{}[],:'
@@ -156,7 +156,7 @@ def parser(l):
 
 
 def tree(s):
-    l = json_list(s)
+    l = tokenizer(s)
     r, c = parser(l)
     return r
 
@@ -172,7 +172,7 @@ def t_common_element():
     ensure(common_element(s2) == '123', 'common_element 测试2')
 
 
-def t_json_list():
+def t_tokenizer():
     s1 = '''{
 "employees": [
 { "firstName":-12.34 , "lastName":null },
@@ -191,7 +191,7 @@ def t_tree():
     # s1 = '''{"employees": [{ "firstName":-12.34 , "lastName":null }]}'''
     print('字符串：', s1)
     print('>>>')
-    print(json_list(s1))
+    print(tokenizer(s1))
     print('>>>')
     print('结果：', tree(s1))
 
@@ -209,7 +209,7 @@ def t_tree():
     print('\n\n')
     print('字符串：', s2)
     print('>>>')
-    print(json_list(s2))
+    print(tokenizer(s2))
     print('>>>')
     print('结果：', tree(s2))
 
@@ -217,7 +217,7 @@ def t_tree():
 def t():
     pass
     # t_common_element()
-    # t_json_list()
+    # t_tokenizer()
     t_tree()
 
 t()
